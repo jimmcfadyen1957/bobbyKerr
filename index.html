@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Flipbook</title>
   <style>
-    /* Fix viewport height and disable scrolling */
+    /* Prevent scrolling */
     html, body {
       height: 100vh;
       margin: 0;
@@ -20,7 +20,7 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Flipbook container fills the space above the fixed footer */
+    /* Flipbook container fills space above the fixed footer */
     #flipbook-container {
       width: 90vw;
       height: calc(100vh - 60px);
@@ -98,58 +98,74 @@
     <div id="flipbook">
       
         <div class="page" style="background-image: url('images/page1.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page2.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page3.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page4.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page5.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page6.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page7.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page8.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page9.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page10.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page11.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page12.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page13.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page14.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page15.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page16.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page17.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page18.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page19.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page20.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page21.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page22.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page23.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page24.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page25.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page26.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page27.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page28.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page29.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page30.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page31.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page32.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page33.jpg');"></div>
+        
         <div class="page" style="background-image: url('images/page34.jpg');"></div>
         
         <div class="page" style="background-image: url('images/page35.jpg');"></div>
-        <div class="page" style="background-color: white;"></div>
         
     </div>
   </div>
@@ -162,14 +178,12 @@
   $(document).ready(function() {
     var currentDisplay = null;
     var resizeTimer;
-    var footerHeight = 60; // default footer height
-    // Store the original flipbook HTML to rebuild when needed.
+    var footerHeight = 60;
     var originalFlipbookHTML = $("#flipbook").html();
 
     function getFlipbookDimensions() {
       var width = Math.floor(window.innerWidth * 0.9);
       var availableHeight = window.innerHeight - footerHeight;
-      // In portrait (single) mode, use 90% of available height; in landscape (double) mode, use 100%.
       var mode = checkOrientation();
       var height = mode === "double" ? Math.floor(availableHeight * 1.0) : Math.floor(availableHeight * 0.9);
       console.log("Calculated dimensions: width = " + width + ", height = " + height);
@@ -249,7 +263,6 @@
       }, 300);
     }
 
-    // Initial setup.
     initFlipbook(checkOrientation());
 
     function handleResize() {
@@ -267,36 +280,6 @@
     $(window).on("resize orientationchange", function() {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(handleResize, 300);
-    });
-
-    // Swipe gesture support with reduced sensitivity:
-    var touchStartX = 0;
-    var touchStartY = 0;
-    var touchEndX = 0;
-    var touchEndY = 0;
-    $("#flipbook-container").on("touchstart", function(e) {
-      var touch = e.originalEvent.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-    });
-    $("#flipbook-container").on("touchend", function(e) {
-      var touch = e.originalEvent.changedTouches[0];
-      touchEndX = touch.clientX;
-      touchEndY = touch.clientY;
-      var diffX = touchEndX - touchStartX;
-      var diffY = touchEndY - touchStartY;
-      // Only trigger if horizontal movement is at least 75px and at least twice the vertical movement.
-      if (Math.abs(diffX) > 75 && Math.abs(diffX) > 2 * Math.abs(diffY)) {
-        // Only trigger if the initial touch was near the left or right edge.
-        var containerWidth = $("#flipbook-container").width();
-        if (touchStartX < 100 || touchStartX > containerWidth - 100) {
-          if (diffX > 0) {
-            $("#flipbook").turn("previous");
-          } else {
-            $("#flipbook").turn("next");
-          }
-        }
-      }
     });
   });
   </script>
