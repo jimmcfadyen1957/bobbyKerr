@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <title>Flipbook</title>
   <style>
-    /* Prevent scrolling on the entire page */
+    /* Prevent scrolling */
     html, body {
       overflow: hidden;
       overscroll-behavior: none;
     }
-
+    /* Entire body with wavy blue pattern background */
     body {
       background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'><path d='M0,0 C300,50 900,0 1200,50 L1200,120 L0,120 Z' fill='%230072E3' opacity='0.5'/><path d='M0,20 C300,70 900,20 1200,70 L1200,120 L0,120 Z' fill='%2300A0FF' opacity='0.5'/></svg>") no-repeat center center;
       background-size: cover;
@@ -17,7 +17,7 @@
       padding: 0;
       font-family: Arial, sans-serif;
     }
-    /* Flipbook container fills the available space above the fixed footer */
+    /* Flipbook container fills space above the fixed footer */
     #flipbook-container {
       width: 90vw;
       height: calc(100vh - 60px);
@@ -30,7 +30,7 @@
       background: transparent;
       padding-left: 30px;
     }
-    /* The flipbook itself is centered */
+    /* Center the flipbook */
     #flipbook {
       display: inline-block;
       margin: 0 auto;
@@ -72,8 +72,8 @@
     /* Increase footer button sizes on mobile */
     @media (max-width: 600px) {
       .controls button {
-        padding: 20px 30px;
-        font-size: 22px;
+        padding: 25px 35px;
+        font-size: 24px;
       }
       .controls {
         height: 80px;
@@ -120,7 +120,7 @@
   $(document).ready(function() {
     var currentDisplay = null;
     var resizeTimer;
-    var footerHeight = 60; // Default footer height; adjust via media queries if needed.
+    var footerHeight = 60; // default footer height; adjusted via media query on mobile if needed.
     // Store the original flipbook HTML to rebuild when needed.
     var originalFlipbookHTML = $("#flipbook").html();
 
@@ -223,6 +223,25 @@
     $(window).on("resize orientationchange", function() {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(handleResize, 300);
+    });
+
+    // Add swipe gesture support to the flipbook container
+    var touchStartX = 0;
+    var touchEndX = 0;
+    $("#flipbook-container").on("touchstart", function(e) {
+      touchStartX = e.originalEvent.touches[0].clientX;
+    });
+    $("#flipbook-container").on("touchend", function(e) {
+      touchEndX = e.originalEvent.changedTouches[0].clientX;
+      var diff = touchEndX - touchStartX;
+      // Threshold of 50 pixels swipe distance
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          $("#flipbook").turn("previous");
+        } else {
+          $("#flipbook").turn("next");
+        }
+      }
     });
   });
   </script>
