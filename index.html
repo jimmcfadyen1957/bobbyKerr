@@ -4,6 +4,12 @@
   <meta charset="utf-8">
   <title>Flipbook</title>
   <style>
+    /* Prevent scrolling on the entire page */
+    html, body {
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+
     body {
       background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'><path d='M0,0 C300,50 900,0 1200,50 L1200,120 L0,120 Z' fill='%230072E3' opacity='0.5'/><path d='M0,20 C300,70 900,20 1200,70 L1200,120 L0,120 Z' fill='%2300A0FF' opacity='0.5'/></svg>") no-repeat center center;
       background-size: cover;
@@ -11,7 +17,7 @@
       padding: 0;
       font-family: Arial, sans-serif;
     }
-    /* Container for the flipbook fills the space above the fixed footer */
+    /* Flipbook container fills the available space above the fixed footer */
     #flipbook-container {
       width: 90vw;
       height: calc(100vh - 60px);
@@ -38,7 +44,7 @@
       border: 1px solid #999;
       position: absolute; /* turn.js positions pages absolutely */
     }
-    /* Fixed footer controls at the bottom with a larger button size */
+    /* Fixed footer controls at the bottom */
     .controls {
       position: fixed;
       bottom: 0;
@@ -62,6 +68,16 @@
       margin: 0 20px;
       font-size: 20px;
       vertical-align: middle;
+    }
+    /* Increase footer button sizes on mobile */
+    @media (max-width: 600px) {
+      .controls button {
+        padding: 20px 30px;
+        font-size: 22px;
+      }
+      .controls {
+        height: 80px;
+      }
     }
   </style>
   <!-- jQuery and turn.js from CDN -->
@@ -104,12 +120,10 @@
   $(document).ready(function() {
     var currentDisplay = null;
     var resizeTimer;
-    // Footer height is 60px.
-    var footerHeight = 60;
+    var footerHeight = 60; // Default footer height; adjust via media queries if needed.
     // Store the original flipbook HTML to rebuild when needed.
     var originalFlipbookHTML = $("#flipbook").html();
 
-    // Calculate flipbook dimensions based on 90% of viewport width and 90% of available height (viewport - footer).
     function getFlipbookDimensions() {
       var width = Math.floor(window.innerWidth * 0.9);
       var availableHeight = window.innerHeight - footerHeight;
