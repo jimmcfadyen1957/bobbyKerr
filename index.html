@@ -225,24 +225,35 @@
       resizeTimer = setTimeout(handleResize, 300);
     });
 
-    // Add swipe gesture support to the flipbook container
+    // Add swipe gesture support to the flipbook container with reduced sensitivity.
     var touchStartX = 0;
+    var touchStartY = 0;
     var touchEndX = 0;
-    $("#flipbook-container").on("touchstart", function(e) {
-      touchStartX = e.originalEvent.touches[0].clientX;
-    });
-    $("#flipbook-container").on("touchend", function(e) {
-      touchEndX = e.originalEvent.changedTouches[0].clientX;
-      var diff = touchEndX - touchStartX;
-      // Threshold of 50 pixels swipe distance
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-          $("#flipbook").turn("previous");
-        } else {
-          $("#flipbook").turn("next");
-        }
-      }
-    });
+    var touchEndY = 0;
+    $("#flipbook-container").on("touchstart", function(e) {{
+      var touch = e.originalEvent.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }});
+    $("#flipbook-container").on("touchend", function(e) {{
+      var touch = e.originalEvent.changedTouches[0];
+      touchEndX = touch.clientX;
+      touchEndY = touch.clientY;
+      var diffX = touchEndX - touchStartX;
+      var diffY = touchEndY - touchStartY;
+      // Only trigger if horizontal movement is at least 75px and more than twice the vertical movement.
+      if (Math.abs(diffX) > 75 && Math.abs(diffX) > 2 * Math.abs(diffY)) {{
+        // Only trigger if the initial touch was near the left or right edge.
+        var containerWidth = $("#flipbook-container").width();
+        if (touchStartX < 100 || touchStartX > containerWidth - 100) {{
+          if (diffX > 0) {{
+            $("#flipbook").turn("previous");
+          }} else {{
+            $("#flipbook").turn("next");
+          }}
+        }}
+      }}
+    }});
   });
   </script>
 </body>
